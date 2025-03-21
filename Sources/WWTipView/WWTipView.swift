@@ -24,6 +24,7 @@ open class WWTipView: UIView {
     public var textFont: UIFont? = .systemFont(ofSize: 14.0) { didSet { contentLabel.font = textFont }}
     public var upperImage: UIImage? = .init(named: "UpperTriangle", in: .module, with: nil)
     public var lowerImage: UIImage? = .init(named: "LowerTriangle", in: .module, with: nil)
+    public var edgeInsets: UIEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
     
     public weak var delegate: Delegate?
     
@@ -70,9 +71,9 @@ public extension WWTipView {
         translatesAutoresizingMaskIntoConstraints = false
         
         viewSetting(at: view, direction: direction, renderingMode: renderingMode)
-        centerXConstraintSetting(targetView: target.view, tipView: view, position: position)
+        centerXConstraintSetting(targetView: target.view, tipView: view, position: position, edgeInsets: edgeInsets)
         
-        visualFormats(at: view, direction: direction).forEach { format in
+        visualFormats(at: view, direction: direction, edgeInsets: edgeInsets).forEach { format in
             let constraints = NSLayoutConstraint.constraints(withVisualFormat: format, options: [.directionMask], metrics: nil, views: views)
             NSLayoutConstraint.activate(constraints)
         }
@@ -129,14 +130,16 @@ private extension WWTipView {
         lowerImageView.isHidden = (direction == .lower)
     }
     
-    /// 設定圖示指標的位置
+    /// [設定圖示指標的位置](https://ithelp.ithome.com.tw/m/articles/10205322)
     /// - Parameters:
     ///   - targetView: UIView
     ///   - tipView: UIView
     ///   - position: Position
-    func centerXConstraintSetting(targetView: UIView, tipView: UIView, position: Position) {
+    ///   - edgeInsets: 邊界間距
+    func centerXConstraintSetting(targetView: UIView, tipView: UIView, position: Position, edgeInsets: UIEdgeInsets) {
         
         let convertPoint = tipView.convert(tipView.bounds, to: targetView)
+        let fixEdgeInsetGap = (edgeInsets.left - edgeInsets.right) * 0.5
         let constantGap: CGFloat
         
         switch position {
@@ -145,24 +148,25 @@ private extension WWTipView {
         case .right(let gap): constantGap = convertPoint.maxX - targetView.bounds.midX - gap
         }
         
-        centerXConstraints.forEach { $0.constant = constantGap }
+        centerXConstraints.forEach { $0.constant = constantGap  - fixEdgeInsetGap }
     }
     
     /// [定位的VFL處理 (左右對齊 / 高度自適應)](https://serpapi.com/google-autocomplete-api)
     /// - Parameters:
     ///   - view: UIView
     ///   - direction: Direction
+    ///   - edgeInsets: 邊界間距
     /// - Returns: [String]
-    func visualFormats(at view: UIView, direction: Direction = .upper) -> [String] {
+    func visualFormats(at view: UIView, direction: Direction = .upper, edgeInsets: UIEdgeInsets) -> [String] {
         
         let minHeight = contentLabel.font.pointSize + 8
         let visualFormat: String
         
         switch direction {
-        case .upper: visualFormat = "V:[view]-(\(-view.bounds.height))-[self]"
-        case .lower: visualFormat = "V:[view]-0-[self]"
+        case .upper: visualFormat = "V:[view]-(\(-edgeInsets.bottom-view.bounds.height))-[self]"
+        case .lower: visualFormat = "V:[view]-(\(edgeInsets.top))-[self]"
         }
         
-        return ["H:|-[self]-|", "\(visualFormat)", "V:[self(>=\(minHeight)@750)]"]
+        return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)", "V:[self(>=\(minHeight)@750)]"]
     }
 }

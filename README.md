@@ -11,7 +11,7 @@
 ### [Installation with Swift Package Manager](https://medium.com/彼得潘的-swift-ios-app-開發問題解答集/使用-spm-安裝第三方套件-xcode-11-新功能-2c4ffcf85b4b)
 ```
 dependencies: [
-    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.0.1"))
+    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.0.3"))
 ]
 ```
 
@@ -43,6 +43,7 @@ final class ViewController: UIViewController {
         tipView.delegate = self
         tipView.text = "Oh my God, I was pressed..."
         tipView.textColor = .white
+        tipView.edgeInsets = .init(top: 8, left: 56, bottom: 4, right: 20)
         tipView.display(target: self, at: sender)
     }
     

@@ -21,7 +21,8 @@ final class ViewController: UIViewController {
         tipView.delegate = self
         tipView.text = "Oh my God, I was pressed..."
         tipView.textColor = .white
-        tipView.display(target: self, at: sender)
+        tipView.edgeInsets = .init(top: 8, left: 56, bottom: 4, right: 20)
+        tipView.display(target: self, at: sender, position: .center)
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {

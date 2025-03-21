@@ -10,7 +10,8 @@
 		813AC52C2D8D3C550017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC52B2D8D3C550017A6C0 /* WWTipView */; };
 		813AC52F2D8D4BC20017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC52E2D8D4BC20017A6C0 /* WWTipView */; };
 		813AC5352D8D568C0017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC5342D8D568C0017A6C0 /* WWTipView */; };
-		813AC5382D8D631D0017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC5372D8D631D0017A6C0 /* WWTipView */; };
+		813AC53B2D8D64A10017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC53A2D8D64A10017A6C0 /* WWTipView */; };
+		813AC53E2D8D6A910017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC53D2D8D6A910017A6C0 /* WWTipView */; };
 		817567FC2CA2C2B400B24577 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817567FB2CA2C2B400B24577 /* AppDelegate.swift */; };
 		817568002CA2C2B400B24577 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817567FF2CA2C2B400B24577 /* ViewController.swift */; };
 		817568032CA2C2B400B24577 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 817568012CA2C2B400B24577 /* Main.storyboard */; };
@@ -34,9 +35,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				813AC5382D8D631D0017A6C0 /* WWTipView in Frameworks */,
+				813AC53B2D8D64A10017A6C0 /* WWTipView in Frameworks */,
 				813AC52F2D8D4BC20017A6C0 /* WWTipView in Frameworks */,
 				81F05ED62D8D153F00CE92C3 /* WWTipView in Frameworks */,
+				813AC53E2D8D6A910017A6C0 /* WWTipView in Frameworks */,
 				813AC52C2D8D3C550017A6C0 /* WWTipView in Frameworks */,
 				813AC5352D8D568C0017A6C0 /* WWTipView in Frameworks */,
 			);
@@ -127,7 +129,8 @@
 				813AC52B2D8D3C550017A6C0 /* WWTipView */,
 				813AC52E2D8D4BC20017A6C0 /* WWTipView */,
 				813AC5342D8D568C0017A6C0 /* WWTipView */,
-				813AC5372D8D631D0017A6C0 /* WWTipView */,
+				813AC53A2D8D64A10017A6C0 /* WWTipView */,
+				813AC53D2D8D6A910017A6C0 /* WWTipView */,
 			);
 			productName = Example;
 			productReference = 817567F82CA2C2B400B24577 /* Example.app */;
@@ -158,7 +161,7 @@
 			);
 			mainGroup = 817567EF2CA2C2B400B24577;
 			packageReferences = (
-				813AC5362D8D631D0017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */,
+				813AC53C2D8D6A910017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */,
 			);
 			productRefGroup = 817567F92CA2C2B400B24577 /* Products */;
 			projectDirPath = "";
@@ -423,12 +426,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		813AC5362D8D631D0017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */ = {
+		813AC53C2D8D6A910017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/William-Weng/WWTipView";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.0.2;
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.0.3;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -446,9 +449,13 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = WWTipView;
 		};
-		813AC5372D8D631D0017A6C0 /* WWTipView */ = {
+		813AC53A2D8D64A10017A6C0 /* WWTipView */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 813AC5362D8D631D0017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */;
+			productName = WWTipView;
+		};
+		813AC53D2D8D6A910017A6C0 /* WWTipView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 813AC53C2D8D6A910017A6C0 /* XCRemoteSwiftPackageReference "WWTipView" */;
 			productName = WWTipView;
 		};
 		81F05ED52D8D153F00CE92C3 /* WWTipView */ = {

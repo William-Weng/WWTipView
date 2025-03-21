@@ -32,8 +32,8 @@ public extension WWTipView {
         case center(_ gap: CGFloat)
         case right(_ gap: CGFloat)
         
-        static public let left = left(16)
+        static public let left = left(0)
         static public let center = center(0)
-        static public let right = right(16)
+        static public let right = right(0)
     }
 }
