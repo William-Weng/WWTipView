@@ -17,5 +17,11 @@ public extension WWTipView {
         ///   - tipView: WWTipView
         ///   - didTouched: Bool
         func tipView(_ tipView: WWTipView, didTouched: Bool)
+        
+        /// 動畫狀態
+        /// - Parameters:
+        ///   - tipView: WWTipView
+        ///   - status: AnimationStatusType
+        func tipView(_ tipView: WWTipView, status: AnimationStatusType)
     }
 }

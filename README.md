@@ -11,20 +11,21 @@
 ### [Installation with Swift Package Manager](https://medium.com/彼得潘的-swift-ios-app-開發問題解答集/使用-spm-安裝第三方套件-xcode-11-新功能-2c4ffcf85b4b)
 ```
 dependencies: [
-    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.0.4"))
+    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.1.0"))
 ]
 ```
 
 ## Function - 可用函式
 |函式|功能|
 |-|-|
-|display(target:at:direction:position:renderingMode:)|顯示提示框|
-|dismiss()|移除提示框|
+|display(target:at:direction:position:animation:renderingMode:)|顯示提示框|
+|dismiss(position:)|移除提示框|
 
 ## WWTipView.Delegate
 |函式|功能|
 |-|-|
 |tipView(_:didTouched:)|被點擊到時的回應|
+|tipView(_:status:)|動畫狀態|
 
 ## [Example](https://ezgif.com/video-to-webp)
 ```swift
@@ -44,7 +45,7 @@ final class ViewController: UIViewController {
         tipView.text = "Oh my God, I was pressed..."
         tipView.textColor = .white
         tipView.edgeInsets = .init(top: 8, left: 56, bottom: 4, right: 20)
-        tipView.display(target: self, at: sender)
+        tipView.display(target: self, at: sender, position: .center)
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
@@ -56,14 +57,18 @@ final class ViewController: UIViewController {
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
-        tipView.display(target: self, at: label, direction: .lower, position: .right, renderingMode: .alwaysOriginal)
+        tipView.display(target: self, at: label, direction: .lower, position: .right, animation: .scale, renderingMode: .alwaysOriginal)
     }
 }
 
 extension ViewController: WWTipView.Delegate {
     
     func tipView(_ tipView: WWTipView, didTouched: Bool) {
-        if didTouched { tipView.dismiss() }
+        if didTouched { tipView.dismiss(animation: .move) }
+    }
+    
+    func tipView(_ tipView: WWTipView, status: WWTipView.AnimationStatusType) {
+        print(status)
     }
 }
 ```

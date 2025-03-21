@@ -34,7 +34,7 @@ final class ViewController: UIViewController {
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
-        tipView.display(target: self, at: label, direction: .lower, position: .right, renderingMode: .alwaysOriginal)
+        tipView.display(target: self, at: label, direction: .lower, position: .right, animation: .scale, renderingMode: .alwaysOriginal)
     }
 }
 
@@ -42,6 +42,10 @@ final class ViewController: UIViewController {
 extension ViewController: WWTipView.Delegate {
     
     func tipView(_ tipView: WWTipView, didTouched: Bool) {
-        if didTouched { tipView.dismiss() }
+        if didTouched { tipView.dismiss(animation: .move) }
+    }
+    
+    func tipView(_ tipView: WWTipView, status: WWTipView.AnimationStatusType) {
+        print(status)
     }
 }
