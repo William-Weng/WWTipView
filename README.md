@@ -1,2 +1,69 @@
 # WWTipView
-Because TipKit can only be used on iOS 17.0 or above, a simple alternative was made.
+
+[![Swift-5.7](https://img.shields.io/badge/Swift-5.7-orange.svg?style=flat)](https://developer.apple.com/swift/) [![iOS-15.0](https://img.shields.io/badge/iOS-15.0-pink.svg?style=flat)](https://developer.apple.com/swift/) ![TAG](https://img.shields.io/github/v/tag/William-Weng/WWTipView) [![Swift Package Manager-SUCCESS](https://img.shields.io/badge/Swift_Package_Manager-SUCCESS-blue.svg?style=flat)](https://developer.apple.com/swift/) [![LICENSE](https://img.shields.io/badge/LICENSE-MIT-yellow.svg?style=flat)](https://developer.apple.com/swift/)
+
+## [Introduction - 簡介](https://swiftpackageindex.com/William-Weng)
+- [Because TipKit can only be used on iOS 17.0 or above, a simple alternative was made.](https://developer.apple.com/documentation/tipkit)
+- [因為TipKit只能在iOS 17.0以上才能使用,所以做了一個簡單的替代方案。](https://www.appcoda.com.tw/tipkit/)
+
+![](./Example.webp)
+
+### [Installation with Swift Package Manager](https://medium.com/彼得潘的-swift-ios-app-開發問題解答集/使用-spm-安裝第三方套件-xcode-11-新功能-2c4ffcf85b4b)
+```
+dependencies: [
+    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.0.0"))
+]
+```
+
+## Function - 可用函式
+|函式|功能|
+|-|-|
+|display(target:at:direction:centerXConstraint:renderingMode:)|顯示提示框|
+|dismiss()|移除提示框|
+
+## Function - 可用函式
+|函式|功能|
+|-|-|
+|tipView(_:didTouched:)|被點擊到時的回應|
+
+
+## [Example](https://ezgif.com/video-to-webp)
+```swift
+import UIKit
+import WWTipView
+
+final class ViewController: UIViewController {
+        
+    @IBOutlet weak var label: UILabel!
+    
+    @IBAction func displayTipView(_ sender: UIButton) {
+        
+        let tipView = WWTipView()
+        
+        tipView.tintColor = .black
+        tipView.delegate = self
+        tipView.text = "Oh my God, I was pressed..."
+        tipView.textColor = .white
+        tipView.display(target: self, at: sender, centerXConstraint: 100)
+    }
+    
+    @IBAction func showTipView(_ sender: UIBarButtonItem) {
+        
+        let tipView = WWTipView()
+        
+        tipView.delegate = self
+        tipView.tintColor = .white
+        tipView.upperImage = UIImage(named: "flash")
+        tipView.lowerImage = UIImage(named: "typhoon")
+        tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
+        tipView.display(target: self, at: label, direction: .lower, renderingMode: .alwaysOriginal)
+    }
+}
+
+extension ViewController: WWTipView.Delegate {
+    
+    func tipView(_ tipView: WWTipView, didTouched: Bool) {
+        if didTouched { tipView.dismiss() }
+    }
+}
+```
