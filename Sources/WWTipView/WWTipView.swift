@@ -28,27 +28,35 @@ open class WWTipView: UIView {
     
     public weak var delegate: Delegate?
     
+    private weak var targetView: UIView?
+    private weak var referenceView: UIView?
+    
+    private var position: Position?
+
     public override init(frame: CGRect) {
         super.init(frame: frame)
         iniSetting()
     }
-    
-    @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        delegate?.tipView(self, didTouched: true)
-    }
-    
+        
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         iniSetting()
     }
     
-    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         delegate?.tipView(self, didTouched: true)
+    }
+        
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        fixScreenRotationSetting()
     }
     
     deinit {
         delegate = nil
+        targetView = nil
+        referenceView = nil
     }
 }
 
@@ -71,7 +79,7 @@ public extension WWTipView {
         translatesAutoresizingMaskIntoConstraints = false
         
         viewSetting(at: view, direction: direction, renderingMode: renderingMode)
-        centerXConstraintSetting(targetView: target.view, tipView: view, position: position, edgeInsets: edgeInsets)
+        centerXConstraintSetting(targetView: target.view, referenceView: view, position: position, edgeInsets: edgeInsets)
         
         visualFormats(at: view, direction: direction, edgeInsets: edgeInsets).forEach { format in
             let constraints = NSLayoutConstraint.constraints(withVisualFormat: format, options: [.directionMask], metrics: nil, views: views)
@@ -82,6 +90,16 @@ public extension WWTipView {
     /// [移除提示框](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     func dismiss() {
         removeFromSuperview()
+    }
+}
+
+// MARK: - @objc
+private extension WWTipView {
+    
+    /// 點擊到時的反應
+    /// - Parameter tap: UITapGestureRecognizer
+    @objc func tapAction(_ tap: UITapGestureRecognizer) {
+        delegate?.tipView(self, didTouched: true)
     }
 }
 
@@ -133,12 +151,12 @@ private extension WWTipView {
     /// [設定圖示指標的位置](https://ithelp.ithome.com.tw/m/articles/10205322)
     /// - Parameters:
     ///   - targetView: UIView
-    ///   - tipView: UIView
+    ///   - referenceView: UIView
     ///   - position: Position
     ///   - edgeInsets: 邊界間距
-    func centerXConstraintSetting(targetView: UIView, tipView: UIView, position: Position, edgeInsets: UIEdgeInsets) {
+    func centerXConstraintSetting(targetView: UIView, referenceView: UIView, position: Position, edgeInsets: UIEdgeInsets) {
         
-        let convertPoint = tipView.convert(tipView.bounds, to: targetView)
+        let convertPoint = referenceView.convert(referenceView.bounds, to: targetView)
         let fixEdgeInsetGap = (edgeInsets.left - edgeInsets.right) * 0.5
         let constantGap: CGFloat
         
@@ -148,6 +166,10 @@ private extension WWTipView {
         case .right(let gap): constantGap = convertPoint.maxX - targetView.bounds.midX - gap
         }
         
+        self.targetView = targetView
+        self.referenceView = referenceView
+        self.position = position
+
         centerXConstraints.forEach { $0.constant = constantGap  - fixEdgeInsetGap }
     }
     
@@ -168,5 +190,18 @@ private extension WWTipView {
         }
         
         return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)", "V:[self(>=\(minHeight)@750)]"]
+    }
+    
+    /// 修正畫面旋轉時定位點的設定
+    func fixScreenRotationSetting() {
+        
+        guard let targetView,
+              let referenceView,
+              let position
+        else {
+            return
+        }
+        
+        centerXConstraintSetting(targetView: targetView, referenceView: referenceView, position: position, edgeInsets: edgeInsets)
     }
 }
