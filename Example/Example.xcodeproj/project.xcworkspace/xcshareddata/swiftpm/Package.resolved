@@ -1,0 +1,15 @@
+{
+  "originHash" : "1f04b8270fcbbf5e12a2ab484105790eece0fc1cf75f42496778aad519d3e5f3",
+  "pins" : [
+    {
+      "identity" : "wwtipview",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/William-Weng/WWTipView",
+      "state" : {
+        "revision" : "8742d0fab524a51e66235f0a7ff9e78a5fbea691",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}
