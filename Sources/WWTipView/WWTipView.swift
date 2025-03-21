@@ -16,7 +16,8 @@ open class WWTipView: UIView {
     @IBOutlet weak var upperImageView: UIImageView!
     @IBOutlet weak var lowerImageView: UIImageView!
     @IBOutlet weak var contentLabel: UILabel!
-    @IBOutlet weak var centerXConstraint: NSLayoutConstraint!
+    
+    @IBOutlet var centerXConstraints: [NSLayoutConstraint]!
     
     public var text: String? { didSet { contentLabel.text = text }}
     public var textColor: UIColor = .black { didSet { contentLabel.textColor = textColor }}
@@ -58,25 +59,18 @@ public extension WWTipView {
     ///   - target: [在哪裡UIViewController上顯示](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     ///   - view: [對齊哪個View](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html)
     ///   - direction: [顯示的位置](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
-    ///   - centerXConstraint: 圖標置中對齊的偏移量
+    ///   - position: 圖標置中對齊的樣式
     ///   - renderingMode: 圖標渲染模式
-    func display(target: UIViewController, at view: UIView, direction: Direction = .upper, centerXConstraint: CGFloat = 0, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
+    func display(target: UIViewController, at view: UIView, direction: Direction = .upper, position: Position = .center, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
         
         let views = ["self": self, "view": view]
         
         removeFromSuperview()
         target.view.addSubview(self)
         translatesAutoresizingMaskIntoConstraints = false
-        layer.anchorPoint = direction.anchorPoint()
         
-        middleView.backgroundColor = tintColor
-        self.centerXConstraint.constant = centerXConstraint
-        
-        
-        upperImageView.image = upperImage?.withRenderingMode(renderingMode)
-        lowerImageView.image = lowerImage?.withRenderingMode(renderingMode)
-        upperImageView.isHidden = (direction == .upper)
-        lowerImageView.isHidden = (direction == .lower)
+        viewSetting(at: view, direction: direction, renderingMode: renderingMode)
+        centerXConstraintSetting(targetView: target.view, tipView: view, position: position)
         
         visualFormats(at: view, direction: direction).forEach { format in
             let constraints = NSLayoutConstraint.constraints(withVisualFormat: format, options: [.directionMask], metrics: nil, views: views)
@@ -117,6 +111,41 @@ private extension WWTipView {
         middleView.layer.cornerRadius = 8
         middleView.clipsToBounds = true
         contentLabel.text = nil
+    }
+    
+    /// 顯示畫面長相的基本設定
+    /// - Parameters:
+    ///   - view: UIView
+    ///   - direction: Direction
+    ///   - renderingMode: UIImage.RenderingMode
+    func viewSetting(at view: UIView, direction: Direction, renderingMode: UIImage.RenderingMode) {
+        
+        layer.anchorPoint = direction.anchorPoint()
+        
+        middleView.backgroundColor = tintColor
+        upperImageView.image = upperImage?.withRenderingMode(renderingMode)
+        lowerImageView.image = lowerImage?.withRenderingMode(renderingMode)
+        upperImageView.isHidden = (direction == .upper)
+        lowerImageView.isHidden = (direction == .lower)
+    }
+    
+    /// 設定圖示指標的位置
+    /// - Parameters:
+    ///   - targetView: UIView
+    ///   - tipView: UIView
+    ///   - position: Position
+    func centerXConstraintSetting(targetView: UIView, tipView: UIView, position: Position) {
+        
+        let convertPoint = tipView.convert(tipView.bounds, to: targetView)
+        let constantGap: CGFloat
+        
+        switch position {
+        case .center(let gap): constantGap = convertPoint.midX - targetView.bounds.midX + gap
+        case .left(let gap): constantGap = convertPoint.minX - targetView.bounds.midX + gap
+        case .right(let gap): constantGap = convertPoint.maxX - targetView.bounds.midX - gap
+        }
+        
+        centerXConstraints.forEach { $0.constant = constantGap }
     }
     
     /// [定位的VFL處理 (左右對齊 / 高度自適應)](https://serpapi.com/google-autocomplete-api)

@@ -11,12 +11,13 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WWTipView" customModule="WWTipView">
             <connections>
-                <outlet property="centerXConstraint" destination="aSU-gz-rqV" id="xDk-rV-ezh"/>
                 <outlet property="contentLabel" destination="mwa-o0-mw2" id="OTP-4A-3uX"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="fN0-bl-CEK"/>
                 <outlet property="lowerImageView" destination="es8-FS-uOu" id="wbC-FH-GbE"/>
                 <outlet property="middleView" destination="JK0-Cv-S2g" id="vZ2-EF-vfi"/>
                 <outlet property="upperImageView" destination="F92-v9-JMv" id="RGe-RY-5Q0"/>
+                <outletCollection property="centerXConstraints" destination="5O2-Fm-mA3" collectionClass="NSMutableArray" id="NYa-gB-mJ3"/>
+                <outletCollection property="centerXConstraints" destination="aSU-gz-rqV" collectionClass="NSMutableArray" id="IfG-DF-cZH"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

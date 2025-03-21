@@ -10,7 +10,7 @@ import WWTipView
 
 // MARK: - ViewController
 final class ViewController: UIViewController {
-        
+    
     @IBOutlet weak var label: UILabel!
     
     @IBAction func displayTipView(_ sender: UIButton) {
@@ -21,7 +21,7 @@ final class ViewController: UIViewController {
         tipView.delegate = self
         tipView.text = "Oh my God, I was pressed..."
         tipView.textColor = .white
-        tipView.display(target: self, at: sender, centerXConstraint: 100)
+        tipView.display(target: self, at: sender)
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
@@ -33,7 +33,7 @@ final class ViewController: UIViewController {
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
-        tipView.display(target: self, at: label, direction: .lower, renderingMode: .alwaysOriginal)
+        tipView.display(target: self, at: label, direction: .lower, position: .right, renderingMode: .alwaysOriginal)
     }
 }
 
