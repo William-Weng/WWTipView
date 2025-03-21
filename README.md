@@ -21,11 +21,10 @@ dependencies: [
 |display(target:at:direction:centerXConstraint:renderingMode:)|顯示提示框|
 |dismiss()|移除提示框|
 
-## Function - 可用函式
+## WWTipView.Delegate
 |函式|功能|
 |-|-|
 |tipView(_:didTouched:)|被點擊到時的回應|
-
 
 ## [Example](https://ezgif.com/video-to-webp)
 ```swift
