@@ -143,14 +143,17 @@ private extension WWTipView {
             contentView.alpha = alpha.to
         }
         
-        animator.addCompletion { [unowned self] position in
+        animator.addCompletion { [weak self] position in
+            
+            guard let this = self else { return }
+            
             switch position {
             case .start, .current: break
             case .end:
                 completion?()
                 switch status {
-                case .display: delegate?.tipView(self, status: .didDisplay)
-                case .dismiss: delegate?.tipView(self, status: .didDismiss)
+                case .display: this.delegate?.tipView(this, status: .didDisplay)
+                case .dismiss: this.delegate?.tipView(this, status: .didDismiss)
                 }
             }
         }

@@ -28,13 +28,13 @@ final class ViewController: UIViewController {
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
         
         let tipView = WWTipView()
-        
+                        
         tipView.delegate = self
         tipView.tintColor = .white
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
-        tipView.display(target: self, at: label, direction: .lower, position: .right, animation: .scale, renderingMode: .alwaysOriginal)
+        tipView.display(target: self, at: label, direction: .lower, position: .center, animation: .scale, renderingMode: .alwaysOriginal)
     }
 }
 
