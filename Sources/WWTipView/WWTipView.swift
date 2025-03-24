@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SceneKit
 
 // MARK: - 簡單的提示框
 open class WWTipView: UIView {
@@ -88,8 +89,7 @@ public extension WWTipView {
             NSLayoutConstraint.activate(constraints)
         }
         
-        animationOption(status: .display, animation: animation) { [unowned self] in
-        }
+        animationOption(status: .display, animation: animation, completion: nil)
     }
     
     /// [移除提示框](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
@@ -109,11 +109,12 @@ private extension WWTipView {
     /// - Parameters:
     ///   - status: StatusType
     ///   - animation: AnimationType
-    func animationOption(status: StatusType, animation: AnimationType, completion: (() -> Void)? = nil) {
+    func animationOption(status: StatusType, animation: AnimationType, completion: (() -> Void)?) {
         switch animation {
         case .alpha(let duration): alphaAnimation(status: status, duration: duration, completion: completion)
         case .scale(let duration, let dampingRatio): scaleAnimation(status: status, duration: duration, dampingRatio: dampingRatio, completion: completion)
         case .move(let duration, let axis, let value): moveAnimation(status: status, direction: direction, duration: duration, axis: axis, value: value, completion: completion)
+        case .rotate(let duration, let type): rotateAnimation(status: status, duration: duration, rotation: type, completion: completion)
         }
     }
     
@@ -122,7 +123,7 @@ private extension WWTipView {
     ///   - status: StatusType
     ///   - duration: TimeInterval
     ///   - completion: (() -> Void)?
-    func alphaAnimation(status: StatusType, duration: TimeInterval, completion: (() -> Void)? = nil) {
+    func alphaAnimation(status: StatusType, duration: TimeInterval, completion: (() -> Void)?) {
         
         let startAlpha = 0.0
         let endAlpha = 1.0
@@ -139,8 +140,9 @@ private extension WWTipView {
         
         contentView.alpha = alpha.from
         
-        let animator = UIViewPropertyAnimator(duration: duration, curve: .linear) { [unowned self] in
-            contentView.alpha = alpha.to
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .linear) { [weak self] in
+            guard let this = self else { return }
+            this.contentView.alpha = alpha.to
         }
         
         animator.addCompletion { [weak self] position in
@@ -167,7 +169,7 @@ private extension WWTipView {
     ///   - direction: Direction?
     ///   - duration: TimeInterval
     ///   - completion: (() -> Void)?
-    func moveAnimation(status: StatusType, direction: Direction?, duration: TimeInterval, axis: NSLayoutConstraint.Axis, value: CGFloat, completion: (() -> Void)? = nil) {
+    func moveAnimation(status: StatusType, direction: Direction?, duration: TimeInterval, axis: NSLayoutConstraint.Axis, value: CGFloat, completion: (() -> Void)?) {
         
         guard let direction else { return }
         
@@ -183,8 +185,9 @@ private extension WWTipView {
         
         contentView.transform = tramform.from
         
-        let animator = UIViewPropertyAnimator(duration: duration, curve: .linear) { [unowned self] in
-            contentView.transform = tramform.to
+        let animator = UIViewPropertyAnimator(duration: duration, curve: .linear) { [weak self] in
+            guard let this = self else { return }
+            this.contentView.transform = tramform.to
         }
         
         animator.startAnimation()
@@ -197,7 +200,7 @@ private extension WWTipView {
     ///   - duration: TimeInterval
     ///   - ratio: CGFloat
     ///   - completion: (() -> Void)?
-    func scaleAnimation(status: StatusType, duration: TimeInterval, dampingRatio ratio: CGFloat, completion: (() -> Void)? = nil) {
+    func scaleAnimation(status: StatusType, duration: TimeInterval, dampingRatio ratio: CGFloat, completion: (() -> Void)?) {
         
         let startTramform = CATransform3DMakeScale(0.1, 0.1, 1.0)
         let endTramform = CATransform3DIdentity
@@ -210,11 +213,46 @@ private extension WWTipView {
         
         contentView.layer.transform = tramform.from
         
-        let animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio) { [unowned self] in
-            contentView.layer.transform = tramform.to
+        let animator = UIViewPropertyAnimator(duration: duration, dampingRatio: ratio) { [weak self] in
+            guard let this = self else { return }
+            this.contentView.layer.transform = tramform.to
         }
         
         animator.startAnimation()
+        alphaAnimation(status: status, duration: duration, completion: completion)
+    }
+    
+    /// y軸旋轉動畫
+    /// - Parameters:
+    ///   - status: StatusType
+    ///   - duration: TimeInterval
+    ///   - rotation: RotationType
+    ///   - completion: (() -> Void)?
+    func rotateAnimation(status: StatusType, duration: TimeInterval, rotation: RotationType, completion: (() -> Void)?) {
+        
+        let keyPath = "transform"
+        let point3D = SCNVector3(x: 0, y: 1, z: 0)
+        let transform3DRotation: (start: CATransform3D, end: CATransform3D)
+        
+        transform3DRotation.end = CATransform3D._build(angle: 0, point3D: point3D)
+        
+        switch rotation {
+        case .left: transform3DRotation.start = CATransform3D._build(angle: CGFloat.pi * 0.5, point3D: point3D)
+        case .right: transform3DRotation.start = CATransform3D._build(angle: CGFloat.pi * -0.5, point3D: point3D)
+        }
+                
+        let animation = CAAnimation._basicAnimation(keyPath: keyPath, delegate: nil, fromValue: transform3DRotation.start, toValue: transform3DRotation.end, duration: duration)
+        
+        switch status {
+        case .display:
+            animation.fromValue = transform3DRotation.start
+            animation.toValue = transform3DRotation.end
+        case .dismiss:
+            animation.fromValue = transform3DRotation.end
+            animation.toValue = transform3DRotation.start
+        }
+        
+        contentView.layer.add(animation, forKey: keyPath)
         alphaAnimation(status: status, duration: duration, completion: completion)
     }
 }
@@ -308,7 +346,6 @@ private extension WWTipView {
     /// - Returns: [String]
     func visualFormats(at view: UIView, direction: Direction = .upper, edgeInsets: UIEdgeInsets) -> [String] {
         
-        let minHeight = contentLabel.font.pointSize + 8
         let visualFormat: String
         
         switch direction {
@@ -316,7 +353,7 @@ private extension WWTipView {
         case .lower: visualFormat = "V:[view]-(\(edgeInsets.top))-[self]"
         }
         
-        return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)", "V:[self(>=\(minHeight)@750)]"]
+        return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)"]
     }
     
     /// 修正畫面旋轉時定位點的設定
@@ -332,3 +369,4 @@ private extension WWTipView {
         centerXConstraintSetting(targetView: targetView, referenceView: referenceView, position: position, edgeInsets: edgeInsets)
     }
 }
+

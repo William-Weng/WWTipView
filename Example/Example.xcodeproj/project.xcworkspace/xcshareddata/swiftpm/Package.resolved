@@ -6,8 +6,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/William-Weng/WWTipView",
       "state" : {
-        "revision" : "496971e8242d5672790fb947e087a66cb78b6bbb",
-        "version" : "1.1.0"
+        "revision" : "0e30798da6f877d1422026bc1cba324d70cc0c37",
+        "version" : "1.1.1"
       }
     }
   ],
