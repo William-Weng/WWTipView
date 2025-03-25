@@ -12,7 +12,7 @@ let package = Package(
         .library(name: "WWTipView", targets: ["WWTipView"]),
     ],
     targets: [
-        .target(name: "WWTipView", resources: [.process("Material/Media.xcassets")]),
+        .target(name: "WWTipView", resources: [.process("Material/Media.xcassets"), .process("Xib")]),
     ],
     swiftLanguageVersions: [
         .v5

@@ -11,7 +11,7 @@
 ### [Installation with Swift Package Manager](https://medium.com/彼得潘的-swift-ios-app-開發問題解答集/使用-spm-安裝第三方套件-xcode-11-新功能-2c4ffcf85b4b)
 ```
 dependencies: [
-    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.1.2"))
+    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.2.0"))
 ]
 ```
 
@@ -19,6 +19,7 @@ dependencies: [
 |函式|功能|
 |-|-|
 |display(target:at:direction:position:animation:renderingMode:)|顯示提示框|
+|display(targetView:at:direction:position:animation:renderingMode:)|顯示提示框|
 |dismiss(position:)|移除提示框|
 
 ## WWTipView.Delegate
@@ -53,7 +54,6 @@ final class ViewController: UIViewController {
         let tipView = WWTipView()
         
         tipView.delegate = self
-        tipView.tintColor = .white
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
@@ -63,7 +63,7 @@ final class ViewController: UIViewController {
 
 extension ViewController: WWTipView.Delegate {
     
-    func tipView(_ tipView: WWTipView, didTouched: Bool) {
+    func tipView(_ tipView: WWTipView, didTouched index: Int) {
         if didTouched { tipView.dismiss(animation: .move) }
     }
     

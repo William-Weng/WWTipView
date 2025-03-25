@@ -26,11 +26,10 @@ final class ViewController: UIViewController {
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
-        
+                
         let tipView = WWTipView()
-                        
+        
         tipView.delegate = self
-        tipView.tintColor = .white
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
@@ -41,8 +40,8 @@ final class ViewController: UIViewController {
 // MARK: - WWTipView.Delegate
 extension ViewController: WWTipView.Delegate {
     
-    func tipView(_ tipView: WWTipView, didTouched: Bool) {
-        if didTouched { tipView.dismiss(animation: .move) }
+    func tipView(_ tipView: WWTipView, didTouched index: Int) {
+        tipView.dismiss(animation: .move)
     }
     
     func tipView(_ tipView: WWTipView, status: WWTipView.AnimationStatusType) {

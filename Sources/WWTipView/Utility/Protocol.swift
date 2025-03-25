@@ -15,8 +15,8 @@ public extension WWTipView {
         /// 被點擊到時的回應
         /// - Parameters:
         ///   - tipView: WWTipView
-        ///   - didTouched: Bool
-        func tipView(_ tipView: WWTipView, didTouched: Bool)
+        ///   - index: 點到哪一個
+        func tipView(_ tipView: WWTipView, didTouched index : Int)
         
         /// 動畫狀態
         /// - Parameters:

@@ -24,6 +24,11 @@ public extension WWTipView {
         case didDismiss
     }
     
+    /// 提示框的內容樣式
+    enum ContentType {
+        case option(_ count: Int)
+    }
+    
     /// TipView圖示顯示的位置
     enum Position {
         

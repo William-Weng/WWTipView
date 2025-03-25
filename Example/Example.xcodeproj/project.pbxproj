@@ -11,7 +11,6 @@
 		3DAD93D52D8DC2FE0041AA34 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 3DAD93D42D8DC2FE0041AA34 /* WWTipView */; };
 		3DF38DC72D8E805A003BE5F6 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 3DF38DC62D8E805A003BE5F6 /* WWTipView */; };
 		811DB61C2D9104440072DB27 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 811DB61B2D9104440072DB27 /* WWTipView */; };
-		811DB61F2D9104B80072DB27 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 811DB61E2D9104B80072DB27 /* WWTipView */; };
 		813AC52C2D8D3C550017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC52B2D8D3C550017A6C0 /* WWTipView */; };
 		813AC52F2D8D4BC20017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC52E2D8D4BC20017A6C0 /* WWTipView */; };
 		813AC5352D8D568C0017A6C0 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 813AC5342D8D568C0017A6C0 /* WWTipView */; };
@@ -23,6 +22,8 @@
 		817568032CA2C2B400B24577 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 817568012CA2C2B400B24577 /* Main.storyboard */; };
 		817568052CA2C2B500B24577 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 817568042CA2C2B500B24577 /* Assets.xcassets */; };
 		817568082CA2C2B500B24577 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 817568062CA2C2B500B24577 /* LaunchScreen.storyboard */; };
+		81A942252D9278A100DE2552 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 81A942242D9278A100DE2552 /* WWTipView */; };
+		81B2DEED2D923FD900A05772 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 81B2DEEC2D923FD900A05772 /* WWTipView */; };
 		81F05ED62D8D153F00CE92C3 /* WWTipView in Frameworks */ = {isa = PBXBuildFile; productRef = 81F05ED52D8D153F00CE92C3 /* WWTipView */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +45,8 @@
 				3DAD93D52D8DC2FE0041AA34 /* WWTipView in Frameworks */,
 				811DB61C2D9104440072DB27 /* WWTipView in Frameworks */,
 				813AC53B2D8D64A10017A6C0 /* WWTipView in Frameworks */,
-				811DB61F2D9104B80072DB27 /* WWTipView in Frameworks */,
+				81B2DEED2D923FD900A05772 /* WWTipView in Frameworks */,
+				81A942252D9278A100DE2552 /* WWTipView in Frameworks */,
 				813AC52F2D8D4BC20017A6C0 /* WWTipView in Frameworks */,
 				81F05ED62D8D153F00CE92C3 /* WWTipView in Frameworks */,
 				813AC5472D8D704B0017A6C0 /* WWTipView in Frameworks */,
@@ -148,7 +150,8 @@
 				3DAD93D42D8DC2FE0041AA34 /* WWTipView */,
 				3DF38DC62D8E805A003BE5F6 /* WWTipView */,
 				811DB61B2D9104440072DB27 /* WWTipView */,
-				811DB61E2D9104B80072DB27 /* WWTipView */,
+				81B2DEEC2D923FD900A05772 /* WWTipView */,
+				81A942242D9278A100DE2552 /* WWTipView */,
 			);
 			productName = Example;
 			productReference = 817567F82CA2C2B400B24577 /* Example.app */;
@@ -179,7 +182,7 @@
 			);
 			mainGroup = 817567EF2CA2C2B400B24577;
 			packageReferences = (
-				811DB61D2D9104B80072DB27 /* XCRemoteSwiftPackageReference "WWTipView" */,
+				81A942232D9278A100DE2552 /* XCRemoteSwiftPackageReference "WWTipView" */,
 			);
 			productRefGroup = 817567F92CA2C2B400B24577 /* Products */;
 			projectDirPath = "";
@@ -360,7 +363,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20240924;
+				CURRENT_PROJECT_VERSION = 20250325;
 				DEVELOPMENT_TEAM = 4Q5CYDAG3B;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Example/Info.plist;
@@ -393,7 +396,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20240924;
+				CURRENT_PROJECT_VERSION = 20250325;
 				DEVELOPMENT_TEAM = 4Q5CYDAG3B;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Example/Info.plist;
@@ -444,12 +447,12 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		811DB61D2D9104B80072DB27 /* XCRemoteSwiftPackageReference "WWTipView" */ = {
+		81A942232D9278A100DE2552 /* XCRemoteSwiftPackageReference "WWTipView" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/William-Weng/WWTipView";
 			requirement = {
-				kind = upToNextMinorVersion;
-				minimumVersion = 1.1.2;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -469,11 +472,6 @@
 		};
 		811DB61B2D9104440072DB27 /* WWTipView */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = WWTipView;
-		};
-		811DB61E2D9104B80072DB27 /* WWTipView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 811DB61D2D9104B80072DB27 /* XCRemoteSwiftPackageReference "WWTipView" */;
 			productName = WWTipView;
 		};
 		813AC52B2D8D3C550017A6C0 /* WWTipView */ = {
@@ -497,6 +495,15 @@
 			productName = WWTipView;
 		};
 		813AC5462D8D704B0017A6C0 /* WWTipView */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WWTipView;
+		};
+		81A942242D9278A100DE2552 /* WWTipView */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 81A942232D9278A100DE2552 /* XCRemoteSwiftPackageReference "WWTipView" */;
+			productName = WWTipView;
+		};
+		81B2DEEC2D923FD900A05772 /* WWTipView */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WWTipView;
 		};

@@ -10,19 +10,20 @@ import SceneKit
 
 // MARK: - 簡單的提示框
 open class WWTipView: UIView {
-        
+    
     @IBOutlet var contentView: UIView!
+    @IBOutlet var centerXConstraints: [NSLayoutConstraint]!
     
     @IBOutlet weak var middleView: UIView!
     @IBOutlet weak var upperImageView: UIImageView!
     @IBOutlet weak var lowerImageView: UIImageView!
-    @IBOutlet weak var contentLabel: UILabel!
+    @IBOutlet weak var contentStackView: UIStackView!
     
-    @IBOutlet var centerXConstraints: [NSLayoutConstraint]!
+    public var text: String = "" { didSet { labelTexts([text]) }}
+    public var texts: [String] = [] { didSet { labelTexts(texts) } }
+    public var textColor: UIColor = .black { didSet { labelTextColor(textColor) }}
+    public var textFont: UIFont = .systemFont(ofSize: 14.0) { didSet { labelTextFont(textFont) }}
     
-    public var text: String? { didSet { contentLabel.text = text }}
-    public var textColor: UIColor = .black { didSet { contentLabel.textColor = textColor }}
-    public var textFont: UIFont? = .systemFont(ofSize: 14.0) { didSet { contentLabel.font = textFont }}
     public var upperImage: UIImage? = .init(named: "UpperTriangle", in: .module, with: nil)
     public var lowerImage: UIImage? = .init(named: "LowerTriangle", in: .module, with: nil)
     public var edgeInsets: UIEdgeInsets = .init(top: 0, left: 8, bottom: 0, right: 8)
@@ -34,22 +35,30 @@ open class WWTipView: UIView {
     
     private var direction: Direction?
     private var position: Position?
-
-    public override init(frame: CGRect) {
+        
+    private override init(frame: CGRect) {
         super.init(frame: frame)
         iniSetting()
     }
-        
+    
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         iniSetting()
     }
     
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-        delegate?.tipView(self, didTouched: true)
+    public convenience init() {
+        self.init(frame: .zero, contentType: .option(1), numberOfLines: 0)
     }
+    
+    public convenience init(frame: CGRect, contentType: ContentType = .option(1), numberOfLines lines: Int = 0, underLineColor: UIColor = .clear) {
         
+        self.init(frame: frame)
+        
+        switch contentType {
+        case .option(let count): (0..<count).forEach { index in initLabelSetting(with: index, numberOfLines: lines, underLineColor: underLineColor) }
+        }
+    }
+            
     public override func layoutSubviews() {
         super.layoutSubviews()
         fixScreenRotationSetting()
@@ -67,7 +76,7 @@ public extension WWTipView {
     
     /// [顯示提示框](https://www.appcoda.com.tw/auto-layout-programmatically/)
     /// - Parameters:
-    ///   - target: [在哪裡UIViewController上顯示](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
+    ///   - target: [在哪個UIViewController上顯示](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     ///   - view: [對齊哪個View](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html)
     ///   - direction: [顯示的位置](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     ///   - animation: 動畫類型
@@ -75,14 +84,27 @@ public extension WWTipView {
     ///   - renderingMode: 圖標渲染模式
     func display(target: UIViewController, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
         
+        return display(targetView: target.view, at: view, direction: direction, position: position, animation: animation, renderingMode: renderingMode)
+    }
+    
+    /// [顯示提示框](https://www.appcoda.com.tw/auto-layout-programmatically/)
+    /// - Parameters:
+    ///   - targetView: [在哪個View上顯示](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
+    ///   - view: [對齊哪個View](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/VisualFormatLanguage.html)
+    ///   - direction: [顯示的位置](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
+    ///   - animation: 動畫類型
+    ///   - position: 圖標置中對齊的樣式
+    ///   - renderingMode: 圖標渲染模式
+    func display(targetView: UIView, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
+        
         let views = ["self": self, "view": view]
         
         removeFromSuperview()
-        target.view.addSubview(self)
+        targetView.addSubview(self)
         translatesAutoresizingMaskIntoConstraints = false
         
         viewSetting(at: view, direction: direction, renderingMode: renderingMode)
-        centerXConstraintSetting(targetView: target.view, referenceView: view, position: position, edgeInsets: edgeInsets)
+        centerXConstraintSetting(targetView: targetView, referenceView: view, position: position, edgeInsets: edgeInsets)
         
         visualFormats(at: view, direction: direction, edgeInsets: edgeInsets).forEach { format in
             let constraints = NSLayoutConstraint.constraints(withVisualFormat: format, options: [.directionMask], metrics: nil, views: views)
@@ -263,11 +285,12 @@ private extension WWTipView {
     /// 點擊到時的反應
     /// - Parameter tap: UITapGestureRecognizer
     @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        delegate?.tipView(self, didTouched: true)
+        guard let toucheView = tap.view else { return }
+        delegate?.tipView(self, didTouched: toucheView.tag)
     }
 }
 
-// MARK: - 小工具
+// MARK: - 畫面設定
 private extension WWTipView {
     
     /// 初始化設定
@@ -284,16 +307,35 @@ private extension WWTipView {
         
         bundle.loadNibNamed(name, owner: self, options: nil)
         contentView.frame = bounds
+        self.tintColor = .white
         
         addSubview(contentView)
     }
     
     /// 畫面相關設定
     func initViewSetting() {
+        
         isUserInteractionEnabled = true
+        
         middleView.layer.cornerRadius = 8
         middleView.clipsToBounds = true
-        contentLabel.text = nil
+    }
+    
+    func initLabelSetting(with tag: Int, numberOfLines lines: Int, underLineColor: UIColor) {
+        
+        let view = TipContentView()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        
+        view.contentLabel.text = nil
+        view.contentLabel.tag = tag
+        view.contentLabel.numberOfLines = lines
+        view.contentLabel.isUserInteractionEnabled = true
+        view.contentLabel.addGestureRecognizer(tap)
+        view.underLineView.backgroundColor = underLineColor
+        
+        if underLineColor == .clear { view.underLineView.isHidden = true }
+        
+        contentStackView.addArrangedSubview(view)
     }
     
     /// 顯示畫面長相的基本設定
@@ -370,3 +412,20 @@ private extension WWTipView {
     }
 }
 
+// MARK: - 文字框相關設定
+private extension WWTipView {
+    
+    /// 文字設定
+    /// - Parameter texts: [String]
+    func labelTexts(_ texts: [String]) {
+        for (index, view) in contentStackView.arrangedSubviews.enumerated() { if let tipContentView = view as? TipContentView { tipContentView.contentLabel.text = texts[safe: index] }}
+    }
+    
+    func labelTextColor(_ textColor: UIColor) {
+        contentStackView.arrangedSubviews.forEach { view in if let tipContentView = view as? TipContentView { tipContentView.contentLabel.textColor = textColor }}
+    }
+    
+    func labelTextFont(_ font: UIFont) {
+        contentStackView.arrangedSubviews.forEach { view in if let tipContentView = view as? TipContentView { tipContentView.contentLabel.font = font }}
+    }
+}

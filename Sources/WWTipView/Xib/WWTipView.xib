@@ -11,7 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="WWTipView" customModule="WWTipView">
             <connections>
-                <outlet property="contentLabel" destination="mwa-o0-mw2" id="OTP-4A-3uX"/>
+                <outlet property="contentStackView" destination="j9d-5e-yJt" id="KGK-8c-fZm"/>
                 <outlet property="contentView" destination="iN0-l3-epB" id="fN0-bl-CEK"/>
                 <outlet property="lowerImageView" destination="es8-FS-uOu" id="wbC-FH-GbE"/>
                 <outlet property="middleView" destination="JK0-Cv-S2g" id="vZ2-EF-vfi"/>
@@ -25,7 +25,7 @@
             <rect key="frame" x="0.0" y="0.0" width="662" height="323"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5JF-uA-2hp">
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="5JF-uA-2hp">
                     <rect key="frame" x="0.0" y="0.0" width="662" height="323"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="sDi-1Q-XXq">
@@ -50,21 +50,17 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JK0-Cv-S2g">
                             <rect key="frame" x="0.0" y="8" width="662" height="307"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;content&gt;" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mwa-o0-mw2">
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="j9d-5e-yJt">
                                     <rect key="frame" x="8" y="8" width="646" height="291"/>
-                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                    <nil key="textColor"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                </stackView>
                             </subviews>
                             <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <color key="tintColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="mwa-o0-mw2" secondAttribute="trailing" constant="8" id="LDQ-er-77c"/>
-                                <constraint firstAttribute="bottom" secondItem="mwa-o0-mw2" secondAttribute="bottom" constant="8" id="jhD-1q-PwC"/>
-                                <constraint firstItem="mwa-o0-mw2" firstAttribute="top" secondItem="JK0-Cv-S2g" secondAttribute="top" constant="8" id="utw-ez-oVz"/>
-                                <constraint firstItem="mwa-o0-mw2" firstAttribute="leading" secondItem="JK0-Cv-S2g" secondAttribute="leading" constant="8" id="wTI-lP-1u4"/>
+                                <constraint firstItem="j9d-5e-yJt" firstAttribute="top" secondItem="JK0-Cv-S2g" secondAttribute="top" constant="8" id="9U9-wu-OmC"/>
+                                <constraint firstItem="j9d-5e-yJt" firstAttribute="centerX" secondItem="JK0-Cv-S2g" secondAttribute="centerX" id="UwZ-jL-oJ1"/>
+                                <constraint firstAttribute="trailing" secondItem="j9d-5e-yJt" secondAttribute="trailing" constant="8" id="fpO-Un-MIb"/>
+                                <constraint firstItem="j9d-5e-yJt" firstAttribute="centerY" secondItem="JK0-Cv-S2g" secondAttribute="centerY" id="uZd-jp-ueg"/>
                             </constraints>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b3s-it-LwL">
