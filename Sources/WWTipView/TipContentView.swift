@@ -25,6 +25,28 @@ class TipContentView: UIView {
     }
 }
 
+// MARK: - 公開工具
+extension TipContentView {
+    
+    /// 外型設定
+    /// - Parameters:
+    ///   - text: 文字
+    ///   - index: Tag
+    ///   - lines: 顯示行數
+    ///   - underLineColor: 底線顏色
+    func configure(text: String?, index: Int, numberOfLines lines: Int, underLineColor: UIColor) {
+        
+        contentLabel.text = text
+        contentLabel.tag = index
+        contentLabel.numberOfLines = lines
+        contentLabel.isUserInteractionEnabled = true
+        underLineView.backgroundColor = underLineColor
+        contentLabel.textColor = .black
+        
+        if underLineColor == .clear { underLineView.isHidden = true }
+    }
+}
+
 // MARK: - 小工具
 private extension TipContentView {
     

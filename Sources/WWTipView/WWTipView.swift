@@ -286,7 +286,7 @@ private extension WWTipView {
     /// - Parameter tap: UITapGestureRecognizer
     @objc func tapAction(_ tap: UITapGestureRecognizer) {
         guard let toucheView = tap.view else { return }
-        delegate?.tipView(self, didTouched: toucheView.tag)
+        delegate?.tipView(self, didTouchedIndex: toucheView.tag)
     }
 }
 
@@ -321,19 +321,18 @@ private extension WWTipView {
         middleView.clipsToBounds = true
     }
     
-    func initLabelSetting(with tag: Int, numberOfLines lines: Int, underLineColor: UIColor) {
+    /// 初始化內容View的設定
+    /// - Parameters:
+    ///   - index: index
+    ///   - lines: 顯示行數
+    ///   - underLineColor: 底線顏色
+    func initLabelSetting(with index: Int, numberOfLines lines: Int, underLineColor: UIColor) {
         
         let view = TipContentView()
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
         
-        view.contentLabel.text = nil
-        view.contentLabel.tag = tag
-        view.contentLabel.numberOfLines = lines
-        view.contentLabel.isUserInteractionEnabled = true
+        view.configure(text: text, index: index, numberOfLines: lines, underLineColor: underLineColor)
         view.contentLabel.addGestureRecognizer(tap)
-        view.underLineView.backgroundColor = underLineColor
-        
-        if underLineColor == .clear { view.underLineView.isHidden = true }
         
         contentStackView.addArrangedSubview(view)
     }

@@ -40,7 +40,7 @@ final class ViewController: UIViewController {
 // MARK: - WWTipView.Delegate
 extension ViewController: WWTipView.Delegate {
     
-    func tipView(_ tipView: WWTipView, didTouched index: Int) {
+    func tipView(_ tipView: WWTipView, didTouchedIndex index: Int) {
         tipView.dismiss(animation: .move)
     }
     

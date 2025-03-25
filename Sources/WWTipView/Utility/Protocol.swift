@@ -16,7 +16,7 @@ public extension WWTipView {
         /// - Parameters:
         ///   - tipView: WWTipView
         ///   - index: 點到哪一個
-        func tipView(_ tipView: WWTipView, didTouched index : Int)
+        func tipView(_ tipView: WWTipView, didTouchedIndex index : Int)
         
         /// 動畫狀態
         /// - Parameters:

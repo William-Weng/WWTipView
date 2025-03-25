@@ -25,7 +25,7 @@ dependencies: [
 ## WWTipView.Delegate
 |函式|功能|
 |-|-|
-|tipView(_:didTouched:)|被點擊到時的回應|
+|tipView(_:didTouchedIndex:)|被點擊到時的回應|
 |tipView(_:status:)|動畫狀態|
 
 ## [Example](https://ezgif.com/video-to-webp)
@@ -63,7 +63,7 @@ final class ViewController: UIViewController {
 
 extension ViewController: WWTipView.Delegate {
     
-    func tipView(_ tipView: WWTipView, didTouched index: Int) {
+    func tipView(_ tipView: WWTipView, didTouchedIndex index: Int) {
         if didTouched { tipView.dismiss(animation: .move) }
     }
     
