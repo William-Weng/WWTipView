@@ -19,10 +19,8 @@ open class WWTipView: UIView {
     @IBOutlet weak var lowerImageView: UIImageView!
     @IBOutlet weak var contentStackView: UIStackView!
     
-    public var text: String = "" { didSet { labelTexts([text]) }}
-    public var texts: [String] = [] { didSet { labelTexts(texts) } }
-    public var textColor: UIColor = .black { didSet { labelTextColor(textColor) }}
-    public var textFont: UIFont = .systemFont(ofSize: 14.0) { didSet { labelTextFont(textFont) }}
+    public var text: String = "" { didSet { texts = [text] }}
+    public var texts: [String] = [] { didSet { labelTexts(texts, textSetting: textSetting) } }
     
     public var upperImage: UIImage? = .init(named: "UpperTriangle", in: .module, with: nil)
     public var lowerImage: UIImage? = .init(named: "LowerTriangle", in: .module, with: nil)
@@ -35,6 +33,7 @@ open class WWTipView: UIView {
     
     private var direction: Direction?
     private var position: Position?
+    private var textSetting: TextSetting = (textColor: .black, underLineColor: .clear, tintColor: .white, font: .systemFont(ofSize: 14.0), lines: 0)
         
     private override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,19 +45,6 @@ open class WWTipView: UIView {
         iniSetting()
     }
     
-    public convenience init() {
-        self.init(frame: .zero, contentType: .option(1), numberOfLines: 0)
-    }
-    
-    public convenience init(frame: CGRect, contentType: ContentType = .option(1), numberOfLines lines: Int = 0, underLineColor: UIColor = .clear) {
-        
-        self.init(frame: frame)
-        
-        switch contentType {
-        case .option(let count): (0..<count).forEach { index in initLabelSetting(with: index, numberOfLines: lines, underLineColor: underLineColor) }
-        }
-    }
-            
     public override func layoutSubviews() {
         super.layoutSubviews()
         fixScreenRotationSetting()
@@ -81,10 +67,10 @@ public extension WWTipView {
     ///   - direction: [顯示的位置](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     ///   - animation: 動畫類型
     ///   - position: 圖標置中對齊的樣式
+    ///   - textSetting: 文字相關設定
     ///   - renderingMode: 圖標渲染模式
-    func display(target: UIViewController, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
-        
-        return display(targetView: target.view, at: view, direction: direction, position: position, animation: animation, renderingMode: renderingMode)
+    func display(target: UIViewController, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, textSetting: TextSetting = (textColor: .black, underLineColor: .clear, tintColor: .white, font: .systemFont(ofSize: 14.0), lines: 0), renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
+        return display(targetView: target.view, at: view, direction: direction, position: position, animation: animation, textSetting: textSetting, renderingMode: renderingMode)
     }
     
     /// [顯示提示框](https://www.appcoda.com.tw/auto-layout-programmatically/)
@@ -94,8 +80,9 @@ public extension WWTipView {
     ///   - direction: [顯示的位置](https://www.kodeco.com/277-auto-layout-visual-format-language-tutorial)
     ///   - animation: 動畫類型
     ///   - position: 圖標置中對齊的樣式
+    ///   - textSetting: 文字相關設定
     ///   - renderingMode: 圖標渲染模式
-    func display(targetView: UIView, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
+    func display(targetView: UIView, at view: UIView, direction: Direction = .upper, position: Position = .center, animation: AnimationType = .alpha, textSetting: TextSetting = (textColor: .black, underLineColor: .clear, tintColor: .white, font: .systemFont(ofSize: 14.0), lines: 0), renderingMode: UIImage.RenderingMode = .alwaysTemplate) {
         
         let views = ["self": self, "view": view]
         
@@ -103,6 +90,10 @@ public extension WWTipView {
         targetView.addSubview(self)
         translatesAutoresizingMaskIntoConstraints = false
         
+        self.textSetting = textSetting
+        self.tintColor = textSetting.tintColor
+        
+        labelTexts(texts, textSetting: textSetting)
         viewSetting(at: view, direction: direction, renderingMode: renderingMode)
         centerXConstraintSetting(targetView: targetView, referenceView: view, position: position, edgeInsets: edgeInsets)
         
@@ -324,14 +315,16 @@ private extension WWTipView {
     /// 初始化內容View的設定
     /// - Parameters:
     ///   - index: index
-    ///   - lines: 顯示行數
-    ///   - underLineColor: 底線顏色
-    func initLabelSetting(with index: Int, numberOfLines lines: Int, underLineColor: UIColor) {
+    ///   - textSetting: 文字相關設定
+    func initLabelSetting(with index: Int, textSetting: TextSetting) {
         
         let view = TipContentView()
         let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        let text = texts[safe: index]
+
+        if text == nil { return }
         
-        view.configure(text: text, index: index, numberOfLines: lines, underLineColor: underLineColor)
+        view.configure(text: text, index: index, numberOfLines: textSetting.lines, textColor: textSetting.textColor, underLineColor: textSetting.underLineColor)
         view.contentLabel.addGestureRecognizer(tap)
         
         contentStackView.addArrangedSubview(view)
@@ -416,15 +409,8 @@ private extension WWTipView {
     
     /// 文字設定
     /// - Parameter texts: [String]
-    func labelTexts(_ texts: [String]) {
-        for (index, view) in contentStackView.arrangedSubviews.enumerated() { if let tipContentView = view as? TipContentView { tipContentView.contentLabel.text = texts[safe: index] }}
-    }
-    
-    func labelTextColor(_ textColor: UIColor) {
-        contentStackView.arrangedSubviews.forEach { view in if let tipContentView = view as? TipContentView { tipContentView.contentLabel.textColor = textColor }}
-    }
-    
-    func labelTextFont(_ font: UIFont) {
-        contentStackView.arrangedSubviews.forEach { view in if let tipContentView = view as? TipContentView { tipContentView.contentLabel.font = font }}
+    func labelTexts(_ texts: [String], textSetting: TextSetting) {
+        contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        (0..<texts.count).forEach { index in initLabelSetting(with: index, textSetting: textSetting) }
     }
 }

@@ -33,15 +33,17 @@ extension TipContentView {
     ///   - text: 文字
     ///   - index: Tag
     ///   - lines: 顯示行數
+    ///   - textColor: 文字顏色
     ///   - underLineColor: 底線顏色
-    func configure(text: String?, index: Int, numberOfLines lines: Int, underLineColor: UIColor) {
-        
+    func configure(text: String?, index: Int, numberOfLines lines: Int, textColor: UIColor, underLineColor: UIColor) {
+                
         contentLabel.text = text
         contentLabel.tag = index
         contentLabel.numberOfLines = lines
         contentLabel.isUserInteractionEnabled = true
+        contentLabel.textColor = textColor
+        
         underLineView.backgroundColor = underLineColor
-        contentLabel.textColor = .black
         
         if underLineColor == .clear { underLineView.isHidden = true }
     }

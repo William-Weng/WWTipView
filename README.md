@@ -11,15 +11,15 @@
 ### [Installation with Swift Package Manager](https://medium.com/彼得潘的-swift-ios-app-開發問題解答集/使用-spm-安裝第三方套件-xcode-11-新功能-2c4ffcf85b4b)
 ```
 dependencies: [
-    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.2.0"))
+    .package(url: "https://github.com/William-Weng/WWTipView.git", .upToNextMajor(from: "1.2.2"))
 ]
 ```
 
 ## Function - 可用函式
 |函式|功能|
 |-|-|
-|display(target:at:direction:position:animation:renderingMode:)|顯示提示框|
-|display(targetView:at:direction:position:animation:renderingMode:)|顯示提示框|
+|display(target:at:direction:position:animation:textSetting:renderingMode:)|顯示提示框|
+|display(targetView:at:direction:position:animation:textSetting:renderingMode:)|顯示提示框|
 |dismiss(position:)|移除提示框|
 
 ## WWTipView.Delegate
@@ -41,23 +41,21 @@ final class ViewController: UIViewController {
         
         let tipView = WWTipView()
         
-        tipView.tintColor = .black
         tipView.delegate = self
         tipView.text = "Oh my God, I was pressed..."
-        tipView.textColor = .white
         tipView.edgeInsets = .init(top: 8, left: 56, bottom: 4, right: 20)
-        tipView.display(target: self, at: sender, position: .center)
+        tipView.display(target: self, at: sender, position: .center, textSetting: (textColor: .white, underLineColor: .clear, tintColor: .black, font: .systemFont(ofSize: 14.0), lines: 0))
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
-        
+                
         let tipView = WWTipView()
         
         tipView.delegate = self
         tipView.upperImage = UIImage(named: "flash")
         tipView.lowerImage = UIImage(named: "typhoon")
         tipView.text = "Intro to Swift Visual Formatting Language — The Good, The Bad, and The VFL"
-        tipView.display(target: self, at: label, direction: .lower, position: .right, animation: .scale, renderingMode: .alwaysOriginal)
+        tipView.display(target: self, at: label, direction: .lower, position: .center, animation: .scale, renderingMode: .alwaysOriginal)
     }
 }
 

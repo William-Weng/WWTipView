@@ -9,6 +9,12 @@ import UIKit
 
 // MARK: - 常數
 public extension WWTipView {
+    
+    typealias TextSetting = (textColor: UIColor, underLineColor: UIColor, tintColor: UIColor, font: UIFont, lines: Int) // 文字相關設定 (文字顏色, 底線顏色, 背景色, 字型, 文字行數)
+}
+
+// MARK: - 常數
+public extension WWTipView {
         
     /// 顯示狀態
     enum StatusType {
@@ -23,12 +29,7 @@ public extension WWTipView {
         case didDisplay
         case didDismiss
     }
-    
-    /// 提示框的內容樣式
-    enum ContentType {
-        case option(_ count: Int)
-    }
-    
+        
     /// TipView圖示顯示的位置
     enum Position {
         

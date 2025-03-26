@@ -17,12 +17,10 @@ final class ViewController: UIViewController {
         
         let tipView = WWTipView()
         
-        tipView.tintColor = .black
         tipView.delegate = self
         tipView.text = "Oh my God, I was pressed..."
-        tipView.textColor = .white
         tipView.edgeInsets = .init(top: 8, left: 56, bottom: 4, right: 20)
-        tipView.display(target: self, at: sender, position: .center)
+        tipView.display(target: self, at: sender, position: .center, textSetting: (textColor: .white, underLineColor: .clear, tintColor: .black, font: .systemFont(ofSize: 14.0), lines: 0))
     }
     
     @IBAction func showTipView(_ sender: UIBarButtonItem) {
