@@ -113,6 +113,164 @@ public extension WWTipView {
             self?.removeFromSuperview()
         }
     }
+    
+    /// 點選到項目所顯示的顏色
+    /// - Parameters:
+    ///   - color: 顏色
+    ///   - indices: 選到的序號們
+    func selectedColor(_ color: UIColor = .lightGray.withAlphaComponent(0.2), with indices: [Int]) {
+        
+        for (index, view) in contentStackView.arrangedSubviews.enumerated() {
+            guard let view = view as? TipContentView else { return }
+            view.backgroundColor = indices.contains(index) ? color : .clear
+        }
+    }
+}
+
+// MARK: - @objc
+private extension WWTipView {
+    
+    /// 點擊到時的反應
+    /// - Parameter tap: UITapGestureRecognizer
+    @objc func tapAction(_ tap: UITapGestureRecognizer) {
+        guard let toucheView = tap.view else { return }
+        delegate?.tipView(self, didTouchedIndex: toucheView.tag)
+    }
+}
+
+// MARK: - 畫面設定
+private extension WWTipView {
+    
+    /// 初始化設定
+    func iniSetting() {
+        initViewFromXib()
+        initViewSetting()
+    }
+    
+    /// 讀取Nib畫面 => 加到View上面
+    func initViewFromXib() {
+        
+        let bundle = Bundle.module
+        let name = String(describing: WWTipView.self)
+        
+        bundle.loadNibNamed(name, owner: self, options: nil)
+        contentView.frame = bounds
+        self.tintColor = .white
+        
+        addSubview(contentView)
+    }
+    
+    /// 畫面相關設定
+    func initViewSetting() {
+        
+        isUserInteractionEnabled = true
+        
+        middleView.layer.cornerRadius = 8
+        middleView.clipsToBounds = true
+    }
+    
+    /// 初始化內容View的設定
+    /// - Parameters:
+    ///   - index: index
+    ///   - textSetting: 文字相關設定
+    func initLabelSetting(with index: Int, textSetting: TextSetting) {
+        
+        let view = TipContentView()
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        let text = texts[safe: index]
+
+        if text == nil { return }
+        
+        view.configure(text: text, index: index, numberOfLines: textSetting.lines, textColor: textSetting.textColor, underLineColor: textSetting.underLineColor)
+        view.contentLabel.addGestureRecognizer(tap)
+        view.layer.cornerRadius = 4
+        
+        contentStackView.addArrangedSubview(view)
+    }
+    
+    /// 顯示畫面長相的基本設定
+    /// - Parameters:
+    ///   - view: UIView
+    ///   - direction: Direction
+    ///   - renderingMode: UIImage.RenderingMode
+    func viewSetting(at view: UIView, direction: Direction, renderingMode: UIImage.RenderingMode) {
+        
+        layer.anchorPoint = direction.anchorPoint()
+        self.direction = direction
+        
+        middleView.backgroundColor = tintColor
+        upperImageView.image = upperImage?.withRenderingMode(renderingMode)
+        lowerImageView.image = lowerImage?.withRenderingMode(renderingMode)
+        upperImageView.isHidden = (direction == .upper)
+        lowerImageView.isHidden = (direction == .lower)
+    }
+    
+    /// [設定圖示指標的位置](https://ithelp.ithome.com.tw/m/articles/10205322)
+    /// - Parameters:
+    ///   - targetView: UIView
+    ///   - referenceView: UIView
+    ///   - position: Position
+    ///   - edgeInsets: 邊界間距
+    func centerXConstraintSetting(targetView: UIView, referenceView: UIView, position: Position, edgeInsets: UIEdgeInsets) {
+        
+        let convertPoint = referenceView.convert(referenceView.bounds, to: targetView)
+        let fixEdgeInsetGap = (edgeInsets.left - edgeInsets.right) * 0.5
+        let constantGap: CGFloat
+        
+        switch position {
+        case .center(let gap): constantGap = convertPoint.midX - targetView.bounds.midX + gap
+        case .left(let gap): constantGap = convertPoint.minX - targetView.bounds.midX + gap
+        case .right(let gap): constantGap = convertPoint.maxX - targetView.bounds.midX - gap
+        }
+        
+        self.targetView = targetView
+        self.referenceView = referenceView
+        self.position = position
+
+        centerXConstraints.forEach { $0.constant = constantGap  - fixEdgeInsetGap }
+    }
+    
+    /// [定位的VFL處理 (左右對齊 / 高度自適應)](https://serpapi.com/google-autocomplete-api)
+    /// - Parameters:
+    ///   - view: UIView
+    ///   - direction: Direction
+    ///   - edgeInsets: 邊界間距
+    /// - Returns: [String]
+    func visualFormats(at view: UIView, direction: Direction = .upper, edgeInsets: UIEdgeInsets) -> [String] {
+        
+        let visualFormat: String
+        
+        switch direction {
+        case .upper: visualFormat = "V:[view]-(\(-edgeInsets.bottom-view.bounds.height))-[self]"
+        case .lower: visualFormat = "V:[view]-(\(edgeInsets.top))-[self]"
+        }
+        
+        return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)"]
+    }
+    
+    /// 修正畫面旋轉時定位點的設定
+    func fixScreenRotationSetting() {
+        
+        guard let targetView,
+              let referenceView,
+              let position
+        else {
+            return
+        }
+        
+        centerXConstraintSetting(targetView: targetView, referenceView: referenceView, position: position, edgeInsets: edgeInsets)
+    }
+}
+
+// MARK: - 文字框相關設定
+private extension WWTipView {
+    
+    /// 文字設定
+    /// - Parameter texts: [String]
+    func labelTexts(_ texts: [String], textSetting: TextSetting) {
+        contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        (0..<texts.count).forEach { index in initLabelSetting(with: index, textSetting: textSetting) }
+    }
 }
 
 // MARK: 動畫效果
@@ -267,150 +425,5 @@ private extension WWTipView {
         
         contentView.layer.add(animation, forKey: keyPath)
         alphaAnimation(status: status, duration: duration, completion: completion)
-    }
-}
-
-// MARK: - @objc
-private extension WWTipView {
-    
-    /// 點擊到時的反應
-    /// - Parameter tap: UITapGestureRecognizer
-    @objc func tapAction(_ tap: UITapGestureRecognizer) {
-        guard let toucheView = tap.view else { return }
-        delegate?.tipView(self, didTouchedIndex: toucheView.tag)
-    }
-}
-
-// MARK: - 畫面設定
-private extension WWTipView {
-    
-    /// 初始化設定
-    func iniSetting() {
-        initViewFromXib()
-        initViewSetting()
-    }
-    
-    /// 讀取Nib畫面 => 加到View上面
-    func initViewFromXib() {
-        
-        let bundle = Bundle.module
-        let name = String(describing: WWTipView.self)
-        
-        bundle.loadNibNamed(name, owner: self, options: nil)
-        contentView.frame = bounds
-        self.tintColor = .white
-        
-        addSubview(contentView)
-    }
-    
-    /// 畫面相關設定
-    func initViewSetting() {
-        
-        isUserInteractionEnabled = true
-        
-        middleView.layer.cornerRadius = 8
-        middleView.clipsToBounds = true
-    }
-    
-    /// 初始化內容View的設定
-    /// - Parameters:
-    ///   - index: index
-    ///   - textSetting: 文字相關設定
-    func initLabelSetting(with index: Int, textSetting: TextSetting) {
-        
-        let view = TipContentView()
-        let tap = UITapGestureRecognizer(target: self, action: #selector(tapAction))
-        let text = texts[safe: index]
-
-        if text == nil { return }
-        
-        view.configure(text: text, index: index, numberOfLines: textSetting.lines, textColor: textSetting.textColor, underLineColor: textSetting.underLineColor)
-        view.contentLabel.addGestureRecognizer(tap)
-        
-        contentStackView.addArrangedSubview(view)
-    }
-    
-    /// 顯示畫面長相的基本設定
-    /// - Parameters:
-    ///   - view: UIView
-    ///   - direction: Direction
-    ///   - renderingMode: UIImage.RenderingMode
-    func viewSetting(at view: UIView, direction: Direction, renderingMode: UIImage.RenderingMode) {
-        
-        layer.anchorPoint = direction.anchorPoint()
-        self.direction = direction
-        
-        middleView.backgroundColor = tintColor
-        upperImageView.image = upperImage?.withRenderingMode(renderingMode)
-        lowerImageView.image = lowerImage?.withRenderingMode(renderingMode)
-        upperImageView.isHidden = (direction == .upper)
-        lowerImageView.isHidden = (direction == .lower)
-    }
-    
-    /// [設定圖示指標的位置](https://ithelp.ithome.com.tw/m/articles/10205322)
-    /// - Parameters:
-    ///   - targetView: UIView
-    ///   - referenceView: UIView
-    ///   - position: Position
-    ///   - edgeInsets: 邊界間距
-    func centerXConstraintSetting(targetView: UIView, referenceView: UIView, position: Position, edgeInsets: UIEdgeInsets) {
-        
-        let convertPoint = referenceView.convert(referenceView.bounds, to: targetView)
-        let fixEdgeInsetGap = (edgeInsets.left - edgeInsets.right) * 0.5
-        let constantGap: CGFloat
-        
-        switch position {
-        case .center(let gap): constantGap = convertPoint.midX - targetView.bounds.midX + gap
-        case .left(let gap): constantGap = convertPoint.minX - targetView.bounds.midX + gap
-        case .right(let gap): constantGap = convertPoint.maxX - targetView.bounds.midX - gap
-        }
-        
-        self.targetView = targetView
-        self.referenceView = referenceView
-        self.position = position
-
-        centerXConstraints.forEach { $0.constant = constantGap  - fixEdgeInsetGap }
-    }
-    
-    /// [定位的VFL處理 (左右對齊 / 高度自適應)](https://serpapi.com/google-autocomplete-api)
-    /// - Parameters:
-    ///   - view: UIView
-    ///   - direction: Direction
-    ///   - edgeInsets: 邊界間距
-    /// - Returns: [String]
-    func visualFormats(at view: UIView, direction: Direction = .upper, edgeInsets: UIEdgeInsets) -> [String] {
-        
-        let visualFormat: String
-        
-        switch direction {
-        case .upper: visualFormat = "V:[view]-(\(-edgeInsets.bottom-view.bounds.height))-[self]"
-        case .lower: visualFormat = "V:[view]-(\(edgeInsets.top))-[self]"
-        }
-        
-        return ["H:|-(\(edgeInsets.left))-[self]-(\(edgeInsets.right))-|", "\(visualFormat)"]
-    }
-    
-    /// 修正畫面旋轉時定位點的設定
-    func fixScreenRotationSetting() {
-        
-        guard let targetView,
-              let referenceView,
-              let position
-        else {
-            return
-        }
-        
-        centerXConstraintSetting(targetView: targetView, referenceView: referenceView, position: position, edgeInsets: edgeInsets)
-    }
-}
-
-// MARK: - 文字框相關設定
-private extension WWTipView {
-    
-    /// 文字設定
-    /// - Parameter texts: [String]
-    func labelTexts(_ texts: [String], textSetting: TextSetting) {
-        contentStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        (0..<texts.count).forEach { index in initLabelSetting(with: index, textSetting: textSetting) }
     }
 }

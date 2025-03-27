@@ -23,12 +23,24 @@
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="JCm-V1-IwM">
                     <rect key="frame" x="0.0" y="0.0" width="593" height="510"/>
                     <subviews>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;Content&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxI-cS-m3c">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oK5-Fa-z4j">
                             <rect key="frame" x="0.0" y="0.0" width="593" height="501"/>
-                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                            <nil key="textColor"/>
-                            <nil key="highlightedColor"/>
-                        </label>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&lt;Content&gt;" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yxI-cS-m3c">
+                                    <rect key="frame" x="4" y="2" width="585" height="497"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="yxI-cS-m3c" firstAttribute="centerY" secondItem="oK5-Fa-z4j" secondAttribute="centerY" id="6ha-Sh-IAv"/>
+                                <constraint firstItem="yxI-cS-m3c" firstAttribute="top" secondItem="oK5-Fa-z4j" secondAttribute="top" constant="2" id="h8o-Lb-p1n"/>
+                                <constraint firstAttribute="trailing" secondItem="yxI-cS-m3c" secondAttribute="trailing" constant="4" id="hIj-fd-7a5"/>
+                                <constraint firstItem="yxI-cS-m3c" firstAttribute="centerX" secondItem="oK5-Fa-z4j" secondAttribute="centerX" id="kZm-nd-DH0"/>
+                            </constraints>
+                        </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G4P-4k-AHK">
                             <rect key="frame" x="0.0" y="509" width="593" height="1"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

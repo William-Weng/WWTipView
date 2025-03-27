@@ -50,7 +50,7 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JK0-Cv-S2g">
                             <rect key="frame" x="0.0" y="8" width="662" height="307"/>
                             <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="j9d-5e-yJt">
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="j9d-5e-yJt">
                                     <rect key="frame" x="8" y="8" width="646" height="291"/>
                                 </stackView>
                             </subviews>
@@ -104,7 +104,7 @@
         <image name="LowerTriangle" width="21.333333969116211" height="18.666666030883789"/>
         <image name="UpperTriangle" width="21.333333969116211" height="18.666666030883789"/>
         <systemColor name="tintColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
